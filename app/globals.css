@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after {
+  cursor: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #0a0a0f;
+  overflow-x: hidden;
+}
+
+.font-michroma {
+  font-family: var(--font-michroma), sans-serif;
+}
+
+.font-ar-one {
+  font-family: var(--font-ar-one), sans-serif;
+}
+
+/* Noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* Carousel 3D perspective */
+.carousel-container {
+  perspective: 1200px;
+  perspective-origin: center center;
+}
+
+.carousel-card {
+  position: absolute;
+  width: 400px;
+  height: 280px;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.carousel-card.center {
+  transform: translateX(-50%) scale(1) rotateY(0deg) translateZ(0px);
+  left: 50%;
+  opacity: 1;
+  z-index: 10;
+}
+
+.carousel-card.left {
+  transform: translateX(-50%) translateX(-60%) rotateY(35deg) scale(0.85) translateZ(-200px);
+  left: 50%;
+  opacity: 0.6;
+  z-index: 5;
+}
+
+.carousel-card.right {
+  transform: translateX(-50%) translateX(60%) rotateY(-35deg) scale(0.85) translateZ(-200px);
+  left: 50%;
+  opacity: 0.6;
+  z-index: 5;
+}
+
+.carousel-card.hidden-left {
+  transform: translateX(-50%) translateX(-110%) rotateY(45deg) scale(0.7) translateZ(-300px);
+  left: 50%;
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.carousel-card.hidden-right {
+  transform: translateX(-50%) translateX(110%) rotateY(-45deg) scale(0.7) translateZ(-300px);
+  left: 50%;
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+}
