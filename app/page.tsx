@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
+import emailjs from "@emailjs/browser";
 import LoadingScreen from "@/components/LoadingScreen";
 import Navbar from "@/components/Navbar";
 import Carousel from "@/components/Carousel";
@@ -25,6 +26,37 @@ const sectionVariants = {
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState(false);
+
+  const handleSend = async () => {
+    if (!formData.name || !formData.email || !formData.message) return;
+
+    setSending(true);
+    setError(false);
+    setSent(false);
+
+    try {
+      await emailjs.send(
+        "YOUR_SERVICE_ID",
+        "YOUR_TEMPLATE_ID",
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+        },
+        "YOUR_PUBLIC_KEY"
+      );
+      setSent(true);
+      setFormData({ name: "", email: "", message: "" });
+    } catch (err) {
+      setError(true);
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <>
@@ -89,18 +121,13 @@ export default function Home() {
               transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
               className="text-center"
             >
-              
-              <h1
-                className="font-michroma text-6xl md:text-7xl lg:text-8xl font-normal text-white tracking-[0.1em] mb-6 leading-none"
-              >
+              <h1 className="font-michroma text-6xl md:text-7xl lg:text-8xl font-normal text-white tracking-[0.1em] mb-6 leading-none">
                 STINABLIS
               </h1>
               <div className="w-20 h-[1px] bg-white/20 mx-auto mb-6" />
               <p className="font-ar-one text-lg md:text-xl lg:text-2xl text-white/70 tracking-wide max-w-lg mx-auto">
                 Where Engineering Meets Sustainability
               </p>
-
-              
             </motion.div>
           </section>
 
@@ -181,7 +208,7 @@ export default function Home() {
           {/* CONTACT */}
           <section
             id="contact"
-            className="relative z-10 min-h-screen flex items-center justify-center px-6"
+            className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 py-24"
           >
             <motion.div
               variants={sectionVariants}
@@ -189,47 +216,120 @@ export default function Home() {
               whileInView="visible"
               exit="exit"
               viewport={{ once: false, amount: 0.3 }}
-              className="max-w-2xl mx-auto text-center"
+              className="w-full max-w-6xl mx-auto"
             >
-              <p className="font-michroma text-[10px] tracking-[0.5em] text-white/30 mb-6">
-                REACH OUT
-              </p>
-              <h2 className="font-michroma text-4xl md:text-5xl lg:text-6xl text-white tracking-wider mb-8 leading-tight">
-                Get In Touch
-              </h2>
-              <div className="w-16 h-[1px] bg-white/20 mx-auto mb-10" />
-              <p className="font-ar-one text-base md:text-lg text-white/60 leading-relaxed mb-12">
-                Ready to continue the journey toward a more sustainable future? Let&apos;s collaborate
-                on solutions that leave a lasting impact — for your organization and for the world.
-              </p>
+              {/* Heading */}
+              <div className="text-center mb-12">
+                <h2 className="font-michroma text-4xl md:text-5xl lg:text-6xl text-white tracking-wider mb-4">
+                  Contact Us
+                </h2>
+                <p className="font-ar-one text-white/60 text-lg">
+                  Tell us what you need. We&apos;ll reply fast.
+                </p>
+              </div>
 
-              {/* Contact options */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  href="mailto:info@stinablis.com"
-                  className="group inline-flex items-center gap-3 px-8 py-4 border border-white/20 rounded-sm font-michroma text-xs tracking-[0.2em] text-white/70 hover:text-white hover:border-white/40 transition-all duration-300"
-                  style={{ background: "rgba(255,255,255,0.03)" }}
+              {/* Three columns */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+
+                {/* Left — Info */}
+                <div className="flex flex-col gap-6">
+                  <p className="font-ar-one text-white/80 text-sm leading-relaxed">
+                    Lot 1324, No.856, 1st Floor Tabuan Jaya<br />
+                    93350 Kuching Sarawak Malaysia
+                  </p>
+                  <p className="font-ar-one text-white/60 text-sm">(+60) 11-6091 5670</p>
+                  <p className="font-ar-one text-white/60 text-sm">info@stinablis.com</p>
+                  <div className="flex flex-col gap-2">
+                    <a
+                      href="https://www.instagram.com/stinablis/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-michroma text-xs tracking-widest text-white/60 hover:text-white transition-colors duration-300"
+                    >
+                      STINABLIS INSTAGRAM PAGE
+                    </a>
+                    <a
+                      href="https://www.linkedin.com/company/stinablis/posts/?feedView=all"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-michroma text-xs tracking-widest text-white/60 hover:text-white transition-colors duration-300"
+                    >
+                      STINABLIS LINKEDIN PAGE
+                    </a>
+                  </div>
+                </div>
+
+                {/* Center — Form */}
+                <div
+                  className="flex flex-col gap-4 p-8 rounded-lg"
+                  style={{ background: "rgba(30,30,30,0.95)", border: "1px solid rgba(255,255,255,0.08)" }}
                 >
-                  EMAIL US
-                  <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
-                </a>
-                <a
-                  href="tel:+1234567890"
-                  className="group inline-flex items-center gap-3 px-8 py-4 border border-white/10 rounded-sm font-michroma text-xs tracking-[0.2em] text-white/40 hover:text-white/70 hover:border-white/20 transition-all duration-300"
+                  <input
+                    type="text"
+                    placeholder="Your name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full bg-transparent border border-white/10 rounded-md px-4 py-3 font-ar-one text-sm text-white/80 placeholder-white/30 focus:outline-none focus:border-white/30 transition-colors duration-300"
+                  />
+                  <input
+                    type="email"
+                    placeholder="Your email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full bg-transparent border border-white/10 rounded-md px-4 py-3 font-ar-one text-sm text-white/80 placeholder-white/30 focus:outline-none focus:border-white/30 transition-colors duration-300"
+                  />
+                  <textarea
+                    placeholder="Your message"
+                    rows={5}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    className="w-full bg-transparent border border-white/10 rounded-md px-4 py-3 font-ar-one text-sm text-white/80 placeholder-white/30 focus:outline-none focus:border-white/30 transition-colors duration-300 resize-none"
+                  />
+
+                  {sent && (
+                    <p className="font-ar-one text-green-400 text-sm">Message sent successfully!</p>
+                  )}
+                  {error && (
+                    <p className="font-ar-one text-red-400 text-sm">Something went wrong. Please try again.</p>
+                  )}
+
+                  <button
+                    onClick={handleSend}
+                    disabled={sending}
+                    className="self-start font-michroma text-xs tracking-widest text-white hover:text-white/60 transition-colors duration-300 pt-1 disabled:opacity-40"
+                  >
+                    {sending ? "SENDING..." : "SEND"}
+                  </button>
+                </div>
+
+                {/* Right — Map */}
+                <div
+                  className="rounded-lg overflow-hidden"
+                  style={{ border: "1px solid rgba(255,255,255,0.08)", height: "380px" }}
                 >
-                  CALL US
-                  <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
-                </a>
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.4022511429835!2d110.3752064!3d1.5265680000000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31fba76d9a491405%3A0x2cd3d5711f3ebe42!2sStinablis!5e0!3m2!1sen!2smy!4v1772768822697!5m2!1sen!2smy"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0, filter: "invert(90%) hue-rotate(180deg)" }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+
               </div>
 
               {/* Footer */}
-              <div className="mt-24 pt-12 border-t border-white/5">
+              <div className="mt-20 pt-8 border-t border-white/5 text-center">
                 <p className="font-michroma text-[10px] tracking-[0.3em] text-white/20">
-                  © 2026 STINABLIS — ALL RIGHTS RESERVED
+                  © 2026 STINABLIS — ALL RIGHTS RESERVED.
                 </p>
               </div>
+
             </motion.div>
           </section>
+
         </>
       )}
     </>
