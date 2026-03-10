@@ -40,14 +40,14 @@ export default function Home() {
 
     try {
       await emailjs.send(
-        "YOUR_SERVICE_ID",
-        "YOUR_TEMPLATE_ID",
+        "service_z4refme",
+        "template_2tz2nes",
         {
           from_name: formData.name,
           from_email: formData.email,
           message: formData.message,
         },
-        "YOUR_PUBLIC_KEY"
+        "W4PxuH5Nidlqts1aJ"
       );
       setSent(true);
       setFormData({ name: "", email: "", message: "" });
@@ -126,7 +126,7 @@ export default function Home() {
               </h1>
               <div className="w-20 h-[1px] bg-white/20 mx-auto mb-6" />
               <p className="font-ar-one text-lg md:text-xl lg:text-2xl text-white/70 tracking-wide max-w-lg mx-auto">
-                Where Engineering Meets Sustainability
+                Digital Manufacturing Solutions in Malaysia
               </p>
             </motion.div>
           </section>
@@ -144,37 +144,19 @@ export default function Home() {
               viewport={{ once: false, amount: 0.3 }}
               className="max-w-3xl mx-auto text-center"
             >
-              <p className="font-michroma text-[10px] tracking-[0.5em] text-white/30 mb-6">
-                OUR STORY
-              </p>
-              <h2 className="font-michroma text-4xl md:text-5xl lg:text-6xl text-white tracking-wider mb-8 leading-tight">
+              <h2 className="font-michroma text-4xl md:text-5xl lg:text-6xl text-white tracking-wider mb-4 leading-tight">
                 About Us
               </h2>
+              <p className="font-ar-one text-base md:text-lg text-white/50 mb-8">
+                Who we are 
+              </p>
               <div className="w-16 h-[1px] bg-white/20 mx-auto mb-10" />
               <p className="font-ar-one text-base md:text-lg text-white/60 leading-relaxed mb-6">
-                We are a team of visionary engineers, architects, and sustainability experts united
-                by a singular purpose: to build a future where technological excellence and
-                environmental responsibility are inseparable.
+                <strong className="text-white/80">Engineering</strong> <strong className="text-white/80">Software</strong> <strong className="text-white/80">Manufacturing</strong> 
               </p>
               <p className="font-ar-one text-base md:text-lg text-white/50 leading-relaxed">
-                Through immersive design and cutting-edge technology, we craft solutions that don&apos;t
-                just meet today&apos;s demands — they anticipate tomorrow&apos;s possibilities. Every project
-                is a bridge between innovation and stewardship.
+                Born in Malaysia, we combine engineering precision, advanced manufacturing, and modern software to deliver high-performance digital manufacturing solutions. From system automation and custom platforms to precision-engineered components, we build reliable tools that help industries design, produce, and operate better.
               </p>
-
-              {/* Stats row */}
-              <div className="mt-16 grid grid-cols-3 gap-8 border-t border-white/5 pt-12">
-                {[
-                  { num: "150+", label: "Projects Delivered" },
-                  { num: "12", label: "Countries Reached" },
-                  { num: "98%", label: "Client Satisfaction" },
-                ].map((stat) => (
-                  <div key={stat.label} className="text-center">
-                    <p className="font-michroma text-2xl md:text-3xl text-white/90 mb-2">{stat.num}</p>
-                    <p className="font-ar-one text-xs md:text-sm text-white/35 tracking-wider">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
             </motion.div>
           </section>
 
@@ -196,7 +178,7 @@ export default function Home() {
                   WHAT WE DO
                 </p>
                 <h2 className="font-michroma text-4xl md:text-5xl lg:text-6xl text-white tracking-wider leading-tight">
-                  Our Services
+                  Our Products
                 </h2>
                 <div className="w-16 h-[1px] bg-white/20 mx-auto mt-8" />
               </div>
@@ -241,15 +223,15 @@ export default function Home() {
                   <p className="font-ar-one text-white/60 text-sm">info@stinablis.com</p>
                   <div className="flex flex-col gap-2">
                     <a
-                      href="https://www.instagram.com/stinablis/"
+                      href="https://facebook.com/stinablis"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-michroma text-xs tracking-widest text-white/60 hover:text-white transition-colors duration-300"
                     >
-                      STINABLIS INSTAGRAM PAGE
+                      STINABLIS FACEBOOK PAGE
                     </a>
                     <a
-                      href="https://www.linkedin.com/company/stinablis/posts/?feedView=all"
+                      href="https://linkedin.com/company/stinablis"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-michroma text-xs tracking-widest text-white/60 hover:text-white transition-colors duration-300"

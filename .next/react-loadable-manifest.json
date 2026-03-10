@@ -1,12 +1,12 @@
 {
-  "app\\page.tsx -> @/components/CustomCursor": {
-    "id": "app\\page.tsx -> @/components/CustomCursor",
+  "app/page.tsx -> @/components/CustomCursor": {
+    "id": "app/page.tsx -> @/components/CustomCursor",
     "files": [
       "static/chunks/_app-pages-browser_components_CustomCursor_tsx.js"
     ]
   },
-  "app\\page.tsx -> @/components/ThreeCube": {
-    "id": "app\\page.tsx -> @/components/ThreeCube",
+  "app/page.tsx -> @/components/ThreeCube": {
+    "id": "app/page.tsx -> @/components/ThreeCube",
     "files": [
       "static/chunks/_app-pages-browser_components_ThreeCube_tsx.js"
     ]

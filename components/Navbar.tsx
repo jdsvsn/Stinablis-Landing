@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 const navLinks = [
   { label: "HOME", href: "#home" },
   { label: "ABOUT", href: "#about" },
-  { label: "SERVICES", href: "#services" },
+  { label: "PRODUCTS", href: "#services" },
   { label: "CONTACT", href: "#contact" },
 ];
 
@@ -39,9 +39,8 @@ export default function Navbar() {
       <button
   onClick={() => scrollTo("#home")}
   className="transition-opacity duration-300 hover:opacity-70"
-  aria-label="Go to home"
->
-  <img src="/logo.png" alt="Logo" className="w-20 h-20 object-contain invert" />
+  aria-label="Go to home">
+  <img src="/logo-new.png" alt="Stinablis" className="w-20 h-20 object-contain" />
 </button>
 
       {/* Nav Links */}

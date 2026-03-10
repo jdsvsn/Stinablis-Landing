@@ -4,24 +4,39 @@ import { useState, useEffect, useCallback } from "react";
 
 const services = [
   {
-    title: "Engineering Innovation",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&q=80",
-    description: "Cutting-edge solutions",
+    title: "Rapid Prototyping",
+    image: "/rapid.jpg",
+    description: "Any Idea or Solution that needs a prototype, we are here for you",
   },
   {
-    title: "Sustainable Energy",
-    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800&q=80",
-    description: "Green future",
+    title: "Sustainable Composites",
+    image: "/fibre.jpg",
+    description: "Sustainable materials made from pineapple fibres",
   },
   {
-    title: "Modern Architecture",
-    image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80",
-    description: "Visionary spaces",
+    title: "3D Printing",
+    image: "/3dprint.jpg",
+    description: "3D printed solutions catered to your requirements",
   },
   {
-    title: "Industrial Design",
-    image: "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=800&q=80",
-    description: "Form meets function",
+    title: "Automotive Parts",
+    image: "/bumper.png",
+    description: "Customised parts based on your specifications",
+  },
+  {
+    title: "Reverse Engineering",
+    image: "/scanning.png",
+    description: "Reverse engineered solutions for your needs",
+  },
+  {
+    title: "Software Solutions",
+    image: "/web.png",
+    description: "Customised software solutions, websites and databases",
+  },
+  {
+    title: "Animation and Audio Production",
+    image: "/production.png",
+    description: "Your production needs, all in one stop",
   },
 ];
 

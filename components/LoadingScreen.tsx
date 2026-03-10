@@ -57,7 +57,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
           >
             <p className="font-michroma text-xs tracking-[0.5em] text-white/40 mb-2">LOADING</p>
             <h1 className="font-michroma text-4xl md:text-5xl font-normal tracking-[0.3em] text-white/90">
-              WELCOME
+              WELCOME TO STINABLIS
             </h1>
           </motion.div>
 
@@ -111,7 +111,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
             transition={{ duration: 0.6, delay: 0.8 }}
             className="font-ar-one text-[11px] tracking-[0.2em] text-white mt-16"
           >
-            WHERE ENGINEERING MEETS SUSTAINABILITY
+            WHERE ENGINEERING MEETS INNOVATION
           </motion.p>
         </motion.div>
       )}
