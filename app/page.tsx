@@ -666,6 +666,8 @@ export default function Home() {
                     <img 
                       src="/material.jpg" 
                       alt="Plastic Recycling Feedstock" 
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/30 to-transparent" />
@@ -683,6 +685,8 @@ export default function Home() {
                     <img 
                       src="/plastic-recycling.webp" 
                       alt="Upcycled Composite Material" 
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/30 to-transparent" />
@@ -700,6 +704,8 @@ export default function Home() {
                     <img 
                       src="/producthehe.jpg" 
                       alt="Manufactured Circular Products" 
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/40 to-transparent" />
