@@ -35,16 +35,14 @@ export default function PangkasScrolly() {
         scrollProgress.current = self.progress;
         
         // Map progress to active text slide (aligned with strict non-overlapping 3D process windows)
-        if (self.progress < 0.22) {
+        if (self.progress < 0.25) {
           setActiveSlide(0); // Arrival
-        } else if (self.progress >= 0.22 && self.progress < 0.50) {
-          setActiveSlide(1); // 3D Plastic waste
-        } else if (self.progress >= 0.50 && self.progress < 0.78) {
-          setActiveSlide(2); // Crushed bits
-        } else if (self.progress >= 0.78 && self.progress < 0.95) {
-          setActiveSlide(3); // Products
+        } else if (self.progress >= 0.25 && self.progress < 0.60) {
+          setActiveSlide(1); // 3D Plastic waste ("From")
+        } else if (self.progress >= 0.60 && self.progress < 0.95) {
+          setActiveSlide(2); // Products ("To this")
         } else {
-          setActiveSlide(4); // Fade out to back to normal info
+          setActiveSlide(3); // Fade out to back to normal info
         }
       }
     });
@@ -383,17 +381,17 @@ export default function PangkasScrolly() {
 
       // ── SCENE ANIMATIONS BASED ON LERP PROGRESS ──
 
-      // Scene 1 to 2: 3D Plastic models scale and visibility (Strict active window: p < 0.49)
-      if (p < 0.49) {
+      // Scene 1 to 2: 3D Plastic models scale and visibility (Strict active window: p < 0.60)
+      if (p < 0.60) {
         wasteGroup.visible = true;
         
         let wasteScale = 0;
-        if (p < 0.28) {
-          wasteScale = gsap.utils.mapRange(0.20, 0.28, 0.01, 1.8, p);
-        } else if (p >= 0.28 && p < 0.38) {
+        if (p < 0.35) {
+          wasteScale = gsap.utils.mapRange(0.20, 0.35, 0.01, 1.8, p);
+        } else if (p >= 0.35 && p < 0.48) {
           wasteScale = 1.8;
         } else {
-          wasteScale = gsap.utils.mapRange(0.38, 0.49, 1.8, 0.01, p);
+          wasteScale = gsap.utils.mapRange(0.48, 0.60, 1.8, 0.01, p);
         }
         wasteScale = Math.max(0.01, Math.min(1.8, wasteScale));
         wasteGroup.scale.set(wasteScale, wasteScale, wasteScale);
@@ -423,63 +421,20 @@ export default function PangkasScrolly() {
         wasteGroup.visible = false;
       }
 
-      // Scene 2 to 3: Crushed Plastic Bits (Strict active window: 0.49 <= p < 0.77)
-      if (p >= 0.49 && p < 0.77) {
-        instancedBits.visible = true;
-        
-        let bitsOpacity = 0;
-        if (p < 0.56) {
-          bitsOpacity = gsap.utils.mapRange(0.49, 0.56, 0, 1, p);
-        } else if (p >= 0.56 && p < 0.68) {
-          bitsOpacity = 1;
-        } else {
-          bitsOpacity = gsap.utils.mapRange(0.68, 0.77, 1, 0, p);
-        }
-        flakeMaterial.opacity = Math.max(0, Math.min(1, bitsOpacity));
+      // Disabled intermediate bits stage to match direct From-To layout
+      instancedBits.visible = false;
 
-        // Swirling 3D instanced blender/cyclone motion (Slower speed by half again, wider orbit)
-        const swirlFactor = gsap.utils.mapRange(0.49, 0.77, 0.05, 0.375, p);
-        const dummy = new THREE.Object3D();
-
-        for (let i = 0; i < bitsCount; i++) {
-          const meta = particleMeta[i];
-          const angle = time * meta.speed * swirlFactor + meta.phase;
-          
-          // swirl radius is wider (starts at 1.6 factor)
-          const currentRadius = meta.radius * (1.6 - p * 0.8);
-          
-          dummy.position.set(
-            currentRadius * Math.sin(angle),
-            Math.sin(time * 0.4 + meta.phase) * 3.2 + Math.sin(time * 1.2 + i) * 0.6,
-            currentRadius * Math.cos(angle)
-          );
-          
-          // Spin each 3D angular flake individually (slower by half again)
-          dummy.rotation.set(
-            (time * meta.rotSpeedX * 0.25) + meta.phase,
-            (time * meta.rotSpeedY * 0.25) + meta.phase,
-            time * meta.rotSpeedZ * 0.25
-          );
-          
-          dummy.updateMatrix();
-          instancedBits.setMatrixAt(i, dummy.matrix);
-        }
-        instancedBits.instanceMatrix.needsUpdate = true;
-      } else {
-        instancedBits.visible = false;
-      }
-
-      // Scene 3 to 4: Manufactured Products (Strict active window: 0.78 <= p < 0.98)
-      if (p >= 0.78 && p < 0.98) {
+      // Scene 2 to 3: Manufactured Products (Strict active window: 0.60 <= p < 0.98)
+      if (p >= 0.60 && p < 0.98) {
         tilesGroup.visible = true;
         
         let tileScale = 0;
-        if (p < 0.84) {
-          tileScale = gsap.utils.mapRange(0.78, 0.84, 0.01, 1.0, p);
-        } else if (p >= 0.84 && p < 0.90) {
+        if (p < 0.72) {
+          tileScale = gsap.utils.mapRange(0.60, 0.72, 0.01, 1.0, p);
+        } else if (p >= 0.72 && p < 0.88) {
           tileScale = 1.0;
         } else {
-          tileScale = gsap.utils.mapRange(0.90, 0.98, 1.0, 0.01, p);
+          tileScale = gsap.utils.mapRange(0.88, 0.98, 1.0, 0.01, p);
         }
         tileScale = Math.max(0.01, Math.min(1.0, tileScale));
         tilesGroup.scale.set(tileScale, tileScale, tileScale);
@@ -559,7 +514,7 @@ export default function PangkasScrolly() {
           >
             <div className="max-w-5xl w-full flex flex-col items-center">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-lime/10 border border-lime/20 text-lime text-[11px] tracking-[0.25em] uppercase font-mono mb-8">
-                Circular Manufacturing
+                Circular Construction Materials
               </div>
               <h2 className="font-anton text-[60px] md:text-[9vw] lg:text-[120px] tracking-[0.03em] leading-[1.0] uppercase text-frost">
                 PANG<span className="text-lime">KAS</span>
@@ -584,7 +539,7 @@ export default function PangkasScrolly() {
           >
             <div className="max-w-xl w-full flex flex-col items-center">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-coral/10 border border-coral/20 text-coral text-[10px] tracking-[0.2em] uppercase font-mono mb-6">
-                Step 01 · Feedstock
+                From
               </div>
               <h3 className="font-anton text-[36px] md:text-[50px] tracking-[0.03em] uppercase text-frost mb-4">
                 Post-Consumer Waste
@@ -595,7 +550,7 @@ export default function PangkasScrolly() {
             </div>
           </div>
 
-          {/* SLIDE 3: Crushed Plastic Bits */}
+          {/* SLIDE 3: Manufactured Products */}
           <div 
             className="absolute inset-0 flex flex-col items-center justify-center px-6 md:px-12 text-center transition-all duration-[800ms] ease-out"
             style={{ 
@@ -605,33 +560,11 @@ export default function PangkasScrolly() {
             }}
           >
             <div className="max-w-xl w-full flex flex-col items-center">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-lime/10 border border-lime/20 text-lime text-[10px] tracking-[0.2em] uppercase font-mono mb-6">
-                Step 02 · Processing
-              </div>
-              <h3 className="font-anton text-[36px] md:text-[50px] tracking-[0.03em] uppercase text-frost mb-4">
-                Shred, Wash & Extrude
-              </h3>
-              <p className="text-[14px] md:text-[16px] leading-[1.8] text-frost/50 font-light">
-                Collected plastic waste is sorted, shredded, washed, and processed into structural flakes, ready for clean upcycled material molding.
-              </p>
-            </div>
-          </div>
-
-          {/* SLIDE 4: Manufactured Products */}
-          <div 
-            className="absolute inset-0 flex flex-col items-center justify-center px-6 md:px-12 text-center transition-all duration-[800ms] ease-out"
-            style={{ 
-              opacity: activeSlide === 3 ? 1 : 0,
-              transform: activeSlide === 3 ? "translateY(0)" : activeSlide < 3 ? "translateY(40px)" : "translateY(-40px)",
-              pointerEvents: activeSlide === 3 ? "auto" : "none"
-            }}
-          >
-            <div className="max-w-xl w-full flex flex-col items-center">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-teal/20 border border-teal/30 text-lime text-[10px] tracking-[0.2em] uppercase font-mono mb-6">
-                Step 03 · Output
+                To this
               </div>
               <h3 className="font-anton text-[36px] md:text-[50px] tracking-[0.03em] uppercase text-frost mb-4">
-                Manufactured Products
+                End Product
               </h3>
               <p className="text-[14px] md:text-[16px] leading-[1.8] text-frost/50 font-light mb-8">
                 Final high-performance circular materials are manufactured, yielding durable pavers, composite tiles, and customized structural outputs.
@@ -663,12 +596,12 @@ export default function PangkasScrolly() {
             </div>
           </div>
 
-          {/* SLIDE 5: Fade Out Transition */}
+          {/* SLIDE 4: Fade Out Transition */}
           <div 
             className="absolute inset-0 flex flex-col items-center justify-center transition-all duration-[800ms] ease-out opacity-0 pointer-events-none"
             style={{ 
-              opacity: activeSlide === 4 ? 1 : 0,
-              transform: activeSlide === 4 ? "translateY(0)" : "translateY(40px)"
+              opacity: activeSlide === 3 ? 1 : 0,
+              transform: activeSlide === 3 ? "translateY(0)" : "translateY(40px)"
             }}
           >
             {/* Empty block to let canvas dissolve and naturally transition to details below */}
