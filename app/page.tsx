@@ -17,6 +17,7 @@ import { Instagram, Linkedin, Facebook } from "lucide-react";
 const CustomCursor = dynamic(() => import("@/components/CustomCursor"), { ssr: false });
 const CarPartModel = dynamic(() => import("@/components/CarPartModel"), { ssr: false });
 const LiquidEther = dynamic(() => import("@/components/LiquidEther"), { ssr: false });
+const PangkasScrolly = dynamic(() => import("@/components/PangkasScrolly"), { ssr: false });
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
@@ -355,6 +356,44 @@ export default function Home() {
         }
       );
 
+      // Pangkas Section Details
+      gsap.fromTo(".pangkas-info-header", 
+        { y: 30, opacity: 0, scale: 0.99 },
+        { 
+          scrollTrigger: { trigger: ".pangkas-info-header", start: "top 85%" }, 
+          y: 0, 
+          opacity: 1, 
+          scale: 1,
+          duration: 1.0, 
+          ease: "power3.out",
+          force3D: true 
+        }
+      );
+      gsap.fromTo(".pangkas-diagram-card", 
+        { y: 40, opacity: 0, scale: 0.98 },
+        { 
+          scrollTrigger: { trigger: ".pangkas-diagram-card", start: "top 85%" }, 
+          y: 0, 
+          opacity: 1, 
+          scale: 1,
+          duration: 1.0, 
+          ease: "power3.out",
+          force3D: true 
+        }
+      );
+      gsap.fromTo(".pangkas-machine-card", 
+        { y: 40, opacity: 0, scale: 0.98 },
+        { 
+          scrollTrigger: { trigger: ".pangkas-machine-card", start: "top 85%" }, 
+          y: 0, 
+          opacity: 1, 
+          scale: 1,
+          duration: 1.0, 
+          ease: "power3.out",
+          force3D: true 
+        }
+      );
+
       // Contact Section
       gsap.fromTo(".contact-header", 
         { y: 30, opacity: 0, scale: 0.99 },
@@ -610,6 +649,303 @@ export default function Home() {
             </div>
           </section>
 
+          {/* PANGKAS */}
+          <section id="pangkas" className="relative z-10 w-full bg-carbon">
+            
+            {/* 3D Scrollytelling Sequence */}
+            <PangkasScrolly />
+
+            {/* Normal Info Cards (revealed on scroll) */}
+            <div className="relative max-w-7xl mx-auto px-6 md:px-12 py-24 md:py-32 border-t border-frost/5">
+              
+              {/* Circular Flow Diagram header */}
+              <div className="pangkas-info-header reveal mb-16">
+                <div className="section-label mb-6 flex items-center gap-4">
+                  <p className="text-[12px] tracking-[0.25em] uppercase text-lime font-semibold">Technical Framework</p>
+                </div>
+                <h3 className="font-anton text-[32px] md:text-[40px] tracking-[0.03em] uppercase text-frost mb-4">
+                  Circular Value Loop
+                </h3>
+              </div>
+
+              {/* Replicated Circular Flow Diagram */}
+              <div className="pangkas-diagram-card reveal relative w-full bg-frost/3 border border-frost/10 rounded-2xl p-6 md:p-8 flex flex-col justify-center min-h-[300px] md:min-h-[400px] backdrop-blur-sm overflow-hidden select-none mb-24">
+                  {/* Subtle Grid overlay for technical/engineering vibe */}
+                  <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+                  
+                  <div className="grid grid-cols-[1fr_1.2fr_1fr] gap-4 items-center relative z-10">
+                    
+                    {/* Left Column: Partner Communities */}
+                    <div className="flex flex-col items-center text-center group">
+                      <h4 className="font-anton text-[13px] md:text-[15px] tracking-wider uppercase text-frost mb-4">
+                        Partner<br />Communities
+                      </h4>
+                      <div className="p-3 bg-white/5 border border-white/10 rounded-lg hover:border-coral transition-colors duration-300">
+                        <img 
+                          src="/partner-communities-icon.png" 
+                          alt="Partner Communities" 
+                          className="w-16 h-16 md:w-24 md:h-24 object-contain brightness-0 invert opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Center Column: Arrows Flow */}
+                    <div className="flex flex-col justify-center gap-6 h-full py-4">
+                      {/* Top Arrow: Feedstock */}
+                      <div className="flex flex-col items-center">
+                        <span className="text-[11px] md:text-[12px] font-mono tracking-widest text-coral mb-2">
+                          Feedstock
+                        </span>
+                        <div className="relative w-full flex items-center justify-center">
+                          <div className="w-full h-[2px] bg-coral/40 relative">
+                            <div className="absolute right-0 top-[-3px] border-solid border-l-coral border-l-[6px] border-y-transparent border-y-[4px] border-r-0" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Bottom Arrow: Compensation */}
+                      <div className="flex flex-col items-center">
+                        <div className="relative w-full flex items-center justify-center">
+                          <div className="w-full h-[2px] bg-lime/40 relative">
+                            <div className="absolute left-0 top-[-3px] border-solid border-r-lime border-r-[6px] border-y-transparent border-y-[4px] border-l-0" />
+                          </div>
+                        </div>
+                        <span className="text-[10px] md:text-[11px] font-mono tracking-widest text-lime mt-2 text-center leading-snug">
+                          RM 1/KG<br />+ Upskilling
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Pangkas */}
+                    <div className="flex flex-col items-center text-center group">
+                      <h4 className="font-anton text-[13px] md:text-[15px] tracking-wider uppercase text-lime mb-4">
+                        PANGKAS
+                      </h4>
+                      <div className="p-3 bg-white/5 border border-white/10 rounded-lg hover:border-lime transition-colors duration-300">
+                        <img 
+                          src="/pangkas-icon.png" 
+                          alt="Pangkas" 
+                          className="w-16 h-16 md:w-24 md:h-24 object-contain brightness-0 invert opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                        />
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              {/* Material & Process Showcase Gallery */}
+              <div className="pangkas-diagram-card reveal grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
+                {/* Image 1: Process */}
+                <div className="relative group overflow-hidden rounded-xl border border-frost/10 bg-carbon">
+                  <div className="h-[220px] relative overflow-hidden">
+                    <img 
+                      src="/material.jpg" 
+                      alt="Plastic Recycling Feedstock" 
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/30 to-transparent" />
+                  </div>
+                  <div className="p-6 relative z-10 -mt-10 bg-carbon/90 backdrop-blur-sm border-t border-frost/5">
+                    <p className="text-[9px] font-mono text-coral uppercase tracking-widest mb-1.5">Stage 01 · Feedstock</p>
+                    <h4 className="font-anton text-[18px] text-frost uppercase tracking-wider mb-2">Recycling Stream</h4>
+                    <p className="text-[12px] text-frost/50 font-light leading-relaxed">Sourced locally, diverting post-consumer plastic directly from landfill wastes.</p>
+                  </div>
+                </div>
+
+                {/* Image 2: Material */}
+                <div className="relative group overflow-hidden rounded-xl border border-frost/10 bg-carbon">
+                  <div className="h-[220px] relative overflow-hidden">
+                    <img 
+                      src="/plastic-recycling.webp" 
+                      alt="Upcycled Composite Material" 
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/30 to-transparent" />
+                  </div>
+                  <div className="p-6 relative z-10 -mt-10 bg-carbon/90 backdrop-blur-sm border-t border-frost/5">
+                    <p className="text-[9px] font-mono text-lime uppercase tracking-widest mb-1.5">Stage 02 · Processing</p>
+                    <h4 className="font-anton text-[18px] text-frost uppercase tracking-wider mb-2">Shredded Materials</h4>
+                    <p className="text-[12px] text-frost/50 font-light leading-relaxed">Processed into high-performance upcycled composite flakes.</p>
+                  </div>
+                </div>
+
+                {/* Image 3: Product */}
+                <div className="relative group overflow-hidden rounded-xl border border-frost/10 bg-carbon">
+                  <div className="h-[220px] relative overflow-hidden">
+                    <img 
+                      src="/producthehe.jpg" 
+                      alt="Manufactured Circular Products" 
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/40 to-transparent" />
+                  </div>
+                  <div className="p-6 relative z-10 -mt-10 bg-carbon/90 backdrop-blur-sm border-t border-frost/5">
+                    <p className="text-[9px] font-mono text-teal uppercase tracking-widest mb-1.5">Stage 03 · Output</p>
+                    <h4 className="font-anton text-[18px] text-frost uppercase tracking-wider mb-2">Manufactured Products</h4>
+                    <p className="text-[12px] text-frost/50 font-light leading-relaxed">Durable, crack-resistant modular floor tiles and circular pavers.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Material Properties Grid */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-24">
+                <div className="p-8 bg-frost/3 border border-frost/10 rounded-xl">
+                  <div className="text-[11px] font-mono tracking-widest text-lime mb-4 uppercase">Material specs</div>
+                  <h3 className="font-anton text-[22px] tracking-[0.05em] text-frost mb-6 uppercase">Characteristics</h3>
+                  <ul className="space-y-3">
+                    {[
+                      { label: "Heat Insulating", desc: "Reduces thermal transfer effectively" },
+                      { label: "Crack Resistant", desc: "High flexural and impact tolerance" },
+                      { label: "Suited for Wet Conditions", desc: "Zero decay or moisture degradation" },
+                      { label: "Lightweight & Durable", desc: "Easy to transport, engineered to last" }
+                    ].map((item, idx) => (
+                      <li key={idx} className="flex flex-col border-b border-frost/5 pb-2">
+                        <span className="text-[14px] text-frost font-medium uppercase font-mono">{item.label}</span>
+                        <span className="text-[12px] text-frost/50 font-light">{item.desc}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="p-8 bg-frost/3 border border-frost/10 rounded-xl flex flex-col justify-between">
+                  <div>
+                    <div className="text-[11px] font-mono tracking-widest text-lime mb-4 uppercase">Social impact</div>
+                    <h3 className="font-anton text-[22px] tracking-[0.05em] text-frost mb-6 uppercase">Empowering Communities</h3>
+                    <ul className="space-y-4 font-light text-[14px] text-frost/70">
+                      <li className="flex gap-3 items-start">
+                        <span className="text-lime font-bold">✓</span>
+                        <span>Create new, localized income streams for partner communities (Feedstock collection).</span>
+                      </li>
+                      <li className="flex gap-3 items-start">
+                        <span className="text-lime font-bold">✓</span>
+                        <span>Divert tonnes of plastic waste directly from landfill to value-added production.</span>
+                      </li>
+                      <li className="flex gap-3 items-start">
+                        <span className="text-lime font-bold">✓</span>
+                        <span>Upskilling local TVET talents through micro-factory operator training.</span>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div className="mt-8 pt-4 border-t border-frost/5 text-[11px] font-mono uppercase text-mauve/80">
+                    Inclusive Infrastructure Focus
+                  </div>
+                </div>
+
+                <div className="p-8 bg-frost/3 border border-frost/10 rounded-xl">
+                  <div className="text-[11px] font-mono tracking-widest text-lime mb-4 uppercase">Economics</div>
+                  <h3 className="font-anton text-[22px] tracking-[0.05em] text-frost mb-6 uppercase">Feedstock Economy</h3>
+                  <div className="space-y-6">
+                    <div>
+                      <p className="text-[12px] text-mauve/80 uppercase font-mono">Profit Margin</p>
+                      <p className="text-[28px] font-anton text-frost">~40% MARGIN</p>
+                      <p className="text-[12px] text-frost/50 font-light mt-1">Pricing at RM5 - 7 / sqft (Production cost ~RM0.90)</p>
+                    </div>
+                    <div>
+                      <p className="text-[12px] text-mauve/80 uppercase font-mono">Feedstock Origin</p>
+                      <p className="text-[20px] font-anton text-frost">RM0.80 - 1.00 / KG</p>
+                      <p className="text-[12px] text-frost/50 font-light mt-1">Community sourced plastic bottles (~18-20 bottles per tile)</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Traction & Project Accomplishments */}
+              <div className="mb-24 p-8 md:p-12 bg-frost/3 border border-frost/10 rounded-xl">
+                <div className="section-label mb-8 flex items-center gap-4">
+                  <p className="text-[12px] tracking-[0.25em] uppercase text-lime font-semibold">Traction & Achievements</p>
+                </div>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                  {[
+                    { val: "3 Projects", label: "Sarawak Sites Installed (RM 60K)" },
+                    { val: "200 KG", label: "Waste Diverted from Landfill" },
+                    { val: "15 Talents", label: "Sarawak TVET Upskilled" },
+                    { val: "100% UV Safe", label: "Stress & Resistance Tested" }
+                  ].map((stat, sIdx) => (
+                    <div key={sIdx} className="border-r border-frost/5 last:border-0 pr-4">
+                      <div className="font-anton text-[32px] md:text-[40px] text-lime mb-2 uppercase">{stat.val}</div>
+                      <div className="text-[12px] md:text-[13px] tracking-wider uppercase text-frost/60">{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Roadmap Timeline */}
+              <div className="pangkas-machine-card reveal bg-frost/3 border border-frost/10 p-8 md:p-12 relative overflow-hidden backdrop-blur-sm rounded-xl">
+                {/* Visual Accent/Glow */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-lime/5 rounded-full filter blur-[80px] pointer-events-none" />
+                
+                <h3 className="font-anton text-[28px] md:text-[36px] tracking-[0.05em] uppercase text-frost mb-16 text-center">
+                  PANGKAS ROADMAP
+                </h3>
+                
+                {/* Horizontal Scroll wrapper for responsive mobile layout */}
+                <div className="overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+                  <div className="min-w-[950px] lg:min-w-0 w-full relative z-10 py-8">
+                    
+                    {/* ROW 1: Time Labels */}
+                    <div className="grid grid-cols-5 relative z-20 mb-6">
+                      {[
+                        "2026 june",
+                        "2026 end",
+                        "2027",
+                        "2028",
+                        "Goal"
+                      ].map((time, idx) => (
+                        <div key={idx} className="text-center font-anton text-[18px] md:text-[20px] text-frost uppercase tracking-[0.02em] px-4">
+                          {time}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* ROW 2: Connector Line and Circle Dots */}
+                    <div className="relative w-full h-12 flex items-center mb-8">
+                      {/* Horizontal Connector Line (Perfect Centering) */}
+                      <div className="absolute left-[10%] right-[10%] h-[2px] bg-white/10 z-0" />
+                      
+                      {/* Grid of Dots */}
+                      <div className="grid grid-cols-5 w-full relative z-20">
+                        {[
+                          "bg-[#eab308] shadow-[0_0_20px_rgba(234,179,8,0.6)]",
+                          "bg-[#3b82f6] shadow-[0_0_20px_rgba(59,130,246,0.6)]",
+                          "bg-[#64748b] shadow-[0_0_20px_rgba(100,116,139,0.6)]",
+                          "bg-[#ef4444] shadow-[0_0_20px_rgba(239,68,68,0.6)]",
+                          "bg-[#22c55e] shadow-[0_0_20px_rgba(34,197,94,0.6)]"
+                        ].map((colorClass, idx) => (
+                          <div key={idx} className="flex justify-center">
+                            <div className={`w-8 h-8 rounded-full ${colorClass} border-4 border-carbon transition-transform duration-300 hover:scale-125`} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* ROW 3: Descriptions */}
+                    <div className="grid grid-cols-5 relative z-20">
+                      {[
+                        ["Run pilot projects and", "GTM across sarawak"],
+                        ["Set up TWO", "processing hubs", "(Kapit and", "Semenggoh)"],
+                        ["Prevent 5 tonnes", "from landfill", "disposal", "Bathroom/lighting", "line"],
+                        ["SIRIM", "CIDB", "Endorsement /", "certification"],
+                        ["5 Partner", "manufacturing sites", "10 tonnes Plastic", "waste diverted", "200 individuals", "upskilled and", "trained"]
+                      ].map((desc, idx) => (
+                        <div key={idx} className="flex flex-col items-center px-4">
+                          <div className="text-center font-roboto text-[13px] md:text-[14px] leading-relaxed text-frost/70 font-light max-w-[170px] whitespace-normal">
+                            {desc.map((line, lIdx) => (
+                              <span key={lIdx} className="block">{line}</span>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </section>
+
           {/* CONTACT */}
           <section id="contact" className="bg-frost text-carbon py-24 md:py-32 px-6 md:px-12 relative z-10 overflow-hidden">
             <div className="max-w-7xl mx-auto">
@@ -648,14 +984,16 @@ export default function Home() {
                   </div>
                   <div className="social-row flex gap-4 mt-12">
                     {[
-                      { icon: Instagram, href: "#", label: "Instagram" },
-                      { icon: Linkedin, href: "#", label: "LinkedIn" },
-                      { icon: Facebook, href: "#", label: "Facebook" }
+                      { icon: Instagram, href: "https://www.instagram.com/stinablis/", label: "Instagram" },
+                      { icon: Linkedin, href: "https://www.linkedin.com/company/stinablis/posts/?feedView=all", label: "LinkedIn" },
+                      { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61559570767870&locale=is_IS#", label: "Facebook" }
                     ].map((s, i) => (
                       <a 
                         key={i} 
                         href={s.href} 
                         aria-label={s.label}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="w-12 h-12 border border-carbon/15 flex items-center justify-center text-carbon hover:bg-coral hover:border-coral hover:text-white transition-all duration-300"
                       >
                         <s.icon size={18} />

@@ -41,10 +41,10 @@ export default function Footer() {
         </li>
         <li>
           <button
-            onClick={() => scrollTo("#prototype")}
+            onClick={() => scrollTo("#pangkas")}
             className="text-[12px] text-mauve tracking-[0.05em] hover:text-coral transition-colors"
           >
-            3D Prototype
+            Pangkas
           </button>
         </li>
         <li>

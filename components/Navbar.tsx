@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Home, Info, Box, Mail, Menu, X } from "lucide-react";
+import { Home, Info, Box, Mail, Menu, X, Recycle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
@@ -9,7 +9,7 @@ const navLinks = [
   { label: "About", href: "#about", icon: Info },
   { label: "Process", href: "#process", icon: Box },
   { label: "Products", href: "#products", icon: Box },
-  { label: "3D Prototype", href: "#prototype", icon: Box },
+  { label: "Pangkas", href: "#pangkas", icon: Recycle },
   { label: "Contact", href: "#contact", icon: Mail },
 ];
 
@@ -148,7 +148,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 bg-carbon z-[490] lg:hidden flex flex-col justify-center px-8 md:px-24"
+            className="fixed inset-0 bg-carbon z-[600] lg:hidden flex flex-col justify-center px-8 md:px-24"
           >
             <div className="absolute top-6 left-6 md:left-12">
               <img 

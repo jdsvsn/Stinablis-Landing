@@ -65,7 +65,10 @@ body {
 .prototype-left,
 .prototype-right,
 .contact-header,
-.contact-col {
+.contact-col,
+.pangkas-info-header,
+.pangkas-diagram-card,
+.pangkas-machine-card {
   opacity: 0;
 }
 
