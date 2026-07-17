@@ -33,11 +33,6 @@ const services = [
     description: "Custom development of websites, applications, and databases tailored to engineering and industrial workflows. Built to integrate with your operations.",
     type: "code"
   },
-  {
-    title: "Animation & Audio",
-    description: "Professional 3D animation, motion graphics, and audio production services for industrial visualization, training, and commercial marketing.",
-    type: "dots"
-  },
 ];
 
 const Visual = ({ type }: { type: string }) => {

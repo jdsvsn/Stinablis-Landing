@@ -28,7 +28,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://stinablis.com"),
-  title: "STINABLIS | Engineering & Digital Manufacturing Solutions",
+  title: "STINABLIS | Industrial Engineering & Digital Manufacturing Solutions",
   description: "STINABLIS: 3D printing, custom automotive parts & rapid prototyping in Kuching, Malaysia. Digital manufacturing for industry & car enthusiasts.",
   keywords: [
     "STINABLIS",
@@ -40,11 +40,14 @@ export const metadata: Metadata = {
     "reverse engineering Malaysia",
     "engineering software solutions"
   ],
+  icons: {
+    icon: "/favicon.ico",
+  },
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "STINABLIS | Engineering & Digital Manufacturing Solutions",
+    title: "STINABLIS | Industrial Engineering & Digital Manufacturing Solutions",
     description: "STINABLIS: 3D printing, custom automotive parts & rapid prototyping in Kuching, Malaysia. Digital manufacturing for industry & car enthusiasts.",
     url: "https://stinablis.com",
     siteName: "STINABLIS",
@@ -61,7 +64,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "STINABLIS | Engineering & Digital Manufacturing Solutions",
+    title: "STINABLIS | Industrial Engineering & Digital Manufacturing Solutions",
     description: "STINABLIS: 3D printing, custom automotive parts & rapid prototyping in Kuching, Malaysia. Digital manufacturing for industry & car enthusiasts.",
     images: ["/logo-new.png"],
   },

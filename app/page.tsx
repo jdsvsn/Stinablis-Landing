@@ -9,9 +9,24 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import LoadingScreen from "@/components/LoadingScreen";
 import Navbar from "@/components/Navbar";
-import ServicesGrid from "@/components/ServicesGrid";
 import Footer from "@/components/Footer";
-import { Instagram, Linkedin, Facebook, Thermometer, ShieldCheck, Droplets, Feather } from "lucide-react";
+import { 
+  Instagram, 
+  Linkedin, 
+  Facebook, 
+  Thermometer, 
+  ShieldCheck, 
+  Droplets, 
+  Feather, 
+  Compass, 
+  Layers, 
+  Leaf, 
+  Recycle, 
+  Search, 
+  Settings, 
+  Terminal, 
+  Zap 
+} from "lucide-react";
 
 // Dynamic imports for client-only components
 const CustomCursor = dynamic(() => import("@/components/CustomCursor"), { ssr: false });
@@ -19,15 +34,46 @@ const CarPartModel = dynamic(() => import("@/components/CarPartModel"), { ssr: f
 const LiquidEther = dynamic(() => import("@/components/LiquidEther"), { ssr: false });
 const PangkasScrolly = dynamic(() => import("@/components/PangkasScrolly"), { ssr: false });
 
+// In-memory flag to persist load state across client-side page transitions
+let hasLoadedBefore = false;
+
 export default function Home() {
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(hasLoadedBefore);
+  const [isFirstLoad, setIsFirstLoad] = useState(!hasLoadedBefore);
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState(false);
 
+  const handleComplete = () => {
+    hasLoadedBefore = true;
+    setIsFirstLoad(false);
+    setLoaded(true);
+  };
+
   useEffect(() => {
     if (!loaded) return;
+
+    // Check if we need to scroll to a section from another page
+    const section = sessionStorage.getItem("scrollToSection");
+    if (section) {
+      sessionStorage.removeItem("scrollToSection");
+      setTimeout(() => {
+        const id = section.replace("#", "");
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 600);
+    }
+
+    // Clean up URL hash in case of direct bookmarked link loads
+    if (window.location.hash) {
+      const hash = window.location.hash;
+      setTimeout(() => {
+        const el = document.getElementById(hash.replace("#", ""));
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+        window.history.replaceState(null, "", window.location.pathname);
+      }, 600);
+    }
 
     gsap.registerPlugin(ScrollTrigger);
 
@@ -74,208 +120,89 @@ export default function Home() {
         .fromTo(".hero-tagline", { y: 20, opacity: 0 }, { y: 0, opacity: 1 }, "-=1.0")
         .fromTo(".hero-actions", { y: 20, opacity: 0 }, { y: 0, opacity: 1 }, "-=1.0");
 
-      // 2. ScrollTriggers for subsequent sections
-
-      // About Section
-      gsap.to(".about-ghost", {
-        y: -150,
-        ease: "none",
-        scrollTrigger: { 
-          trigger: "#about", 
-          start: "top bottom", 
-          end: "bottom top", 
-          scrub: 1.5 
-        }
-      });
-
       // Card minimize effect on scroll enter & exit (floating card transition) with responsive matchMedia
       const mm = gsap.matchMedia();
-      const aboutEl = document.getElementById("about");
       const contactEl = document.getElementById("contact");
       const vh = window.innerHeight;
-      const aboutRatio = aboutEl ? Math.max(0.1, (aboutEl.offsetHeight - vh) / vh) : 1;
       const contactRatio = contactEl ? Math.max(0.1, (contactEl.offsetHeight - vh) / vh) : 1;
 
       // Mobile scale and borders
       mm.add("(max-width: 767px)", () => {
-        const aboutScrollTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: "#about",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 2.0,
-          }
-        });
-
-        aboutScrollTl
-          .fromTo("#about",
-            {
-              scale: 0.95,
-              borderRadius: "20px",
-              boxShadow: "0 15px 30px -10px rgba(0, 0, 0, 0.4)",
-            },
-            {
-              scale: 1.0,
-              borderRadius: "0px",
-              boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)",
-              duration: 1.0,
-              ease: "none"
-            }
-          )
-          .to("#about", {
-            scale: 1.0,
-            borderRadius: "0px",
-            boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)",
-            duration: aboutRatio,
-            ease: "none"
-          })
-          .to("#about", {
-            scale: 0.95,
-            borderRadius: "20px",
-            boxShadow: "0 15px 30px -10px rgba(0, 0, 0, 0.4)",
-            duration: 1.0,
-            ease: "none"
-          });
-
         const contactScrollTl = gsap.timeline({
           scrollTrigger: {
             trigger: "#contact",
             start: "top bottom",
             end: "bottom top",
-            scrub: 2.0,
+            scrub: 2.0
           }
         });
 
-        contactScrollTl
-          .fromTo("#contact",
-            {
-              scale: 0.95,
-              borderRadius: "20px",
-              boxShadow: "0 15px 30px -10px rgba(0, 0, 0, 0.4)",
-            },
-            {
-              scale: 1.0,
-              borderRadius: "0px",
-              boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)",
-              duration: 1.0,
-              ease: "none"
-            }
-          )
-          .to("#contact", {
-            scale: 1.0,
-            borderRadius: "0px",
-            boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)",
-            duration: contactRatio,
-            ease: "none"
-          })
-          .to("#contact", {
-            scale: 0.95,
-            borderRadius: "20px",
-            boxShadow: "0 15px 30px -10px rgba(0, 0, 0, 0.4)",
-            duration: 1.0,
-            ease: "none"
-          });
+        contactScrollTl.fromTo("#contact", {
+          scale: 0.95,
+          borderRadius: "20px",
+          boxShadow: "0 15px 30px -10px rgba(0, 0, 0, 0.4)"
+        }, {
+          scale: 1.0,
+          borderRadius: "0px",
+          boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)",
+          duration: 1.0,
+          ease: "none"
+        }).to("#contact", {
+          scale: 1.0,
+          borderRadius: "0px",
+          boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)",
+          duration: contactRatio,
+          ease: "none"
+        }).to("#contact", {
+          scale: 0.95,
+          borderRadius: "20px",
+          boxShadow: "0 15px 30px -10px rgba(0, 0, 0, 0.4)",
+          duration: 1.0,
+          ease: "none"
+        });
       });
 
       // Desktop scale and borders
       mm.add("(min-width: 768px)", () => {
-        const aboutScrollTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: "#about",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 2.0,
-          }
-        });
-
-        aboutScrollTl
-          .fromTo("#about",
-            {
-              scale: 0.88,
-              borderRadius: "40px",
-              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
-            },
-            {
-              scale: 1.0,
-              borderRadius: "0px",
-              boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)",
-              duration: 1.0,
-              ease: "none"
-            }
-          )
-          .to("#about", {
-            scale: 1.0,
-            borderRadius: "0px",
-            boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)",
-            duration: aboutRatio,
-            ease: "none"
-          })
-          .to("#about", {
-            scale: 0.88,
-            borderRadius: "40px",
-            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
-            duration: 1.0,
-            ease: "none"
-          });
-
         const contactScrollTl = gsap.timeline({
           scrollTrigger: {
             trigger: "#contact",
             start: "top bottom",
             end: "bottom top",
-            scrub: 2.0,
+            scrub: 2.0
           }
         });
 
-        contactScrollTl
-          .fromTo("#contact",
-            {
-              scale: 0.88,
-              borderRadius: "40px",
-              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
-            },
-            {
-              scale: 1.0,
-              borderRadius: "0px",
-              boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)",
-              duration: 1.0,
-              ease: "none"
-            }
-          )
-          .to("#contact", {
-            scale: 1.0,
-            borderRadius: "0px",
-            boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)",
-            duration: contactRatio,
-            ease: "none"
-          })
-          .to("#contact", {
-            scale: 0.88,
-            borderRadius: "40px",
-            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
-            duration: 1.0,
-            ease: "none"
-          });
+        contactScrollTl.fromTo("#contact", {
+          scale: 0.88,
+          borderRadius: "40px",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
+        }, {
+          scale: 1.0,
+          borderRadius: "0px",
+          boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)",
+          duration: 1.0,
+          ease: "none"
+        }).to("#contact", {
+          scale: 1.0,
+          borderRadius: "0px",
+          boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)",
+          duration: contactRatio,
+          ease: "none"
+        }).to("#contact", {
+          scale: 0.88,
+          borderRadius: "40px",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+          duration: 1.0,
+          ease: "none"
+        });
       });
 
-      gsap.fromTo(".pillar", 
-        { y: 40, opacity: 0, scale: 0.98 },
-        { 
-          scrollTrigger: { trigger: ".about-pillars", start: "top 85%" }, 
-          y: 0, 
-          opacity: 1, 
-          scale: 1,
-          stagger: 0.12, 
-          duration: 1.0, 
-          ease: "power3.out",
-          force3D: true 
-        }
-      );
-
-      gsap.fromTo(".about-story", 
+      // 2. Showcase Grid Section animations
+      gsap.fromTo(".grid-header", 
         { y: 30, opacity: 0, scale: 0.99 },
         { 
-          scrollTrigger: { trigger: ".about-story", start: "top 90%" }, 
+          scrollTrigger: { trigger: "#showcase-grid", start: "top 85%" }, 
           y: 0, 
           opacity: 1, 
           scale: 1,
@@ -285,11 +212,10 @@ export default function Home() {
         }
       );
 
-      // Process Section
-      gsap.fromTo(".process-step", 
-        { y: 40, opacity: 0, scale: 0.98 },
+      gsap.fromTo(".grid-card", 
+        { y: 50, opacity: 0, scale: 0.98 },
         { 
-          scrollTrigger: { trigger: "#process", start: "top 80%" }, 
+          scrollTrigger: { trigger: "#showcase-grid", start: "top 75%" }, 
           y: 0, 
           opacity: 1, 
           scale: 1,
@@ -300,101 +226,19 @@ export default function Home() {
         }
       );
 
-      // Products Section
-      gsap.fromTo(".products-header", 
-        { y: 30, opacity: 0, scale: 0.99 },
+      gsap.fromTo(".showcase-ticker", 
+        { y: 20, opacity: 0 },
         { 
-          scrollTrigger: { trigger: "#products", start: "top 85%" }, 
+          scrollTrigger: { trigger: ".showcase-ticker", start: "top 95%" }, 
           y: 0, 
           opacity: 1, 
-          scale: 1,
           duration: 1.0, 
           ease: "power3.out",
           force3D: true 
         }
       );
 
-      // Service Cards animated individually
-      gsap.utils.toArray<HTMLElement>(".service-card").forEach((card) => {
-        gsap.fromTo(card, 
-          { y: 45, opacity: 0, scale: 0.97 },
-          { 
-            scrollTrigger: { trigger: card, start: "top 92%" }, 
-            y: 0, 
-            opacity: 1, 
-            scale: 1,
-            duration: 0.8, 
-            ease: "power3.out",
-            force3D: true 
-          }
-        );
-      });
-
-      // 3D Prototype Section
-      gsap.fromTo(".prototype-left", 
-        { x: -40, opacity: 0, scale: 0.98 },
-        { 
-          scrollTrigger: { trigger: "#prototype", start: "top 80%" }, 
-          x: 0, 
-          opacity: 1, 
-          scale: 1,
-          duration: 1.0, 
-          ease: "power3.out",
-          force3D: true 
-        }
-      );
-      gsap.fromTo(".prototype-right", 
-        { x: 40, opacity: 0, scale: 0.98 },
-        { 
-          scrollTrigger: { trigger: "#prototype", start: "top 80%" }, 
-          x: 0, 
-          opacity: 1, 
-          scale: 1,
-          duration: 1.0, 
-          ease: "power3.out",
-          force3D: true 
-        }
-      );
-
-      // Pangkas Section Details
-      gsap.fromTo(".pangkas-info-header", 
-        { y: 30, opacity: 0, scale: 0.99 },
-        { 
-          scrollTrigger: { trigger: ".pangkas-info-header", start: "top 85%" }, 
-          y: 0, 
-          opacity: 1, 
-          scale: 1,
-          duration: 1.0, 
-          ease: "power3.out",
-          force3D: true 
-        }
-      );
-      gsap.fromTo(".pangkas-diagram-card", 
-        { y: 40, opacity: 0, scale: 0.98 },
-        { 
-          scrollTrigger: { trigger: ".pangkas-diagram-card", start: "top 85%" }, 
-          y: 0, 
-          opacity: 1, 
-          scale: 1,
-          duration: 1.0, 
-          ease: "power3.out",
-          force3D: true 
-        }
-      );
-      gsap.fromTo(".pangkas-machine-card", 
-        { y: 40, opacity: 0, scale: 0.98 },
-        { 
-          scrollTrigger: { trigger: ".pangkas-machine-card", start: "top 85%" }, 
-          y: 0, 
-          opacity: 1, 
-          scale: 1,
-          duration: 1.0, 
-          ease: "power3.out",
-          force3D: true 
-        }
-      );
-
-      // Contact Section
+      // 3. Contact Section
       gsap.fromTo(".contact-header", 
         { y: 30, opacity: 0, scale: 0.99 },
         { 
@@ -422,24 +266,21 @@ export default function Home() {
         }
       );
 
-      // Fade out global bg animation when scrolling into About section
+      // Fade out global bg animation when scrolling into Showcase section
       gsap.to(".global-bg-anim", {
         scrollTrigger: {
-          trigger: "#about",
+          trigger: "#showcase-grid",
           start: "top top",
           end: "top -50%",
-          scrub: true,
+          scrub: true
         },
         opacity: 0,
         ease: "none"
       });
-
-      // Contact Card minimize effect handled by matchMedia above
-
     });
 
     return () => {
-      ctx.revert(); // clean up GSAP animations on unmount
+      ctx.revert();
       gsap.ticker.remove(updateRaf);
       lenis.destroy();
     };
@@ -475,7 +316,9 @@ export default function Home() {
 
   return (
     <>
-      <LoadingScreen onComplete={() => setLoaded(true)} />
+      <div className="scroll-bar fixed top-0 left-0 bg-coral z-[999] w-full origin-left-center" style={{ height: "2px", transform: "scaleX(0)" }}></div>
+
+      {isFirstLoad && <LoadingScreen onComplete={handleComplete} />}
 
       {loaded && (
         <div className="relative w-full overflow-x-hidden bg-carbon text-frost font-roboto">
@@ -507,7 +350,7 @@ export default function Home() {
               </h1>
               <div className="my-8" />
               <p className="hero-tagline text-[14px] md:text-[1.8vw] lg:text-[20px] tracking-[0.1em] uppercase text-mauve/80 leading-[1.6] font-light">
-                Engineering & Digital<br />Manufacturing Solutions
+                Industrial Engineering & Digital<br />Manufacturing Solutions
               </p>
               <div className="hero-actions flex flex-wrap justify-center gap-5 mt-12">
                 <a href="#products" className="btn-primary bg-coral text-white px-9 py-4 text-[13px] tracking-[0.15em] uppercase inline-flex items-center gap-3 transition-all hover:translate-y-[-2px] hover:shadow-[0_15px_45px_rgba(252,103,63,0.35)] font-medium">
@@ -521,191 +364,188 @@ export default function Home() {
             </div>
           </section>
 
-          {/* ABOUT */}
-          <section id="about" className="bg-frost text-carbon py-24 md:py-32 px-6 md:px-12 relative z-10 overflow-hidden">
-            <div className="about-ghost absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-anton text-[120px] md:text-[22vw] tracking-[0.05em] text-carbon/5 pointer-events-none whitespace-nowrap select-none uppercase">
-              ABOUT
-            </div>
-            <div className="about-inner relative z-10 w-full max-w-7xl mx-auto">
-              <div className="section-label reveal mb-10 flex items-center gap-4">
-                <p className="text-[12px] tracking-[0.2em] uppercase text-mauve font-semibold font-roboto">Who we are</p>
-              </div>
+          {/* PHOTO GRID SHOWCASE (Replicating hahaha.jpg Layout) */}
+          <section id="showcase-grid" className="bg-carbon relative z-10 overflow-hidden">
+
+            {/* Ticker Tape Scrolling Capabilities Loop */}
+            <div className="showcase-ticker opacity-0 w-full border-t border-b border-frost/10 py-7 relative overflow-hidden flex bg-carbon">
+              <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-carbon to-transparent z-10 pointer-events-none" />
+              <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-carbon to-transparent z-10 pointer-events-none" />
               
-              <div className="about-pillars grid md:grid-cols-3 gap-0 mb-24 border border-carbon/10 bg-white/50 backdrop-blur-sm">
-                <div className="pillar p-6 md:p-12 border-b md:border-b-0 md:border-r border-carbon/10 reveal">
-                  <div className="pillar-label font-anton text-[32px] tracking-[0.05em] mb-6 text-coral uppercase">ENGINEERING</div>
-                  <p className="text-[15px] leading-[1.8] text-carbon/70 font-light">Precision-first design philosophy rooted in real-world manufacturing constraints and structural integrity.</p>
-                </div>
-                <div className="pillar p-6 md:p-12 border-b md:border-b-0 md:border-r border-carbon/10 reveal">
-                  <div className="pillar-label font-anton text-[32px] tracking-[0.05em] mb-6 text-teal uppercase">SOFTWARE</div>
-                  <p className="text-[15px] leading-[1.8] text-carbon/70 font-light">Modern digital solutions that bridge CAD, simulation, and custom applications for industrial workflows.</p>
-                </div>
-                <div className="pillar p-6 md:p-12 reveal">
-                  <div className="pillar-label font-anton text-[32px] tracking-[0.05em] mb-6 text-carbon uppercase">MANUFACTURING</div>
-                  <p className="text-[15px] leading-[1.8] text-carbon/70 font-light">End-to-end production capability — from rapid prototyping to scalable composite and additive processes.</p>
-                </div>
-              </div>
-
-              <div className="about-divider w-full h-[1px] bg-carbon/10 mb-20" />
-              
-              <div className="about-story grid md:grid-cols-[250px_1fr] gap-12 md:gap-24 items-start reveal">
-                <div className="about-story-label font-anton text-[14px] tracking-[0.2em] uppercase text-mauve/80 pt-2">Our Story</div>
-                <p className="about-story-text text-[20px] md:text-[22px] leading-[1.8] text-carbon/85 max-w-[750px] font-light">
-                  Founded in <strong className="text-carbon font-semibold">Kuching, Sarawak, Malaysia</strong>, STINABLIS was born from the conviction that engineering precision and modern software belong together. We serve industries that need to <strong className="text-carbon font-semibold">design faster, prototype smarter, and produce more effectively</strong> — combining deep manufacturing expertise with digital innovation to solve problems others consider too complex. From pineapple-fiber composites to reverse-engineered automotive parts, we build solutions that are as elegant as they are functional.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* PROCESS */}
-          <section id="process" className="bg-carbon py-24 md:py-32 px-6 md:px-12 relative z-10 overflow-hidden">
-            <div className="max-w-7xl mx-auto">
-              <div className="section-label reveal mb-20 flex items-center gap-4">
-                <p className="text-[12px] tracking-[0.2em] uppercase text-mauve font-semibold font-roboto">How we work</p>
-              </div>
-
-              <div className="grid md:grid-cols-4 gap-12 md:gap-8">
-                {[
-                  { 
-                    step: "01", 
-                    title: "Consultation", 
-                    desc: "Deep dive into your engineering challenges and manufacturing goals.",
-                    color: "text-coral"
-                  },
-                  { 
-                    step: "02", 
-                    title: "Design & Simulation", 
-                    desc: "Precision CAD modeling followed by rigorous structural and functional testing.",
-                    color: "text-teal"
-                  },
-                  { 
-                    step: "03", 
-                    title: "Prototyping", 
-                    desc: "Rapid fabrication using advanced composites or additive manufacturing.",
-                    color: "text-lime"
-                  },
-                  { 
-                    step: "04", 
-                    title: "Delivery & Scale", 
-                    desc: "Final validation and seamless transition to production-ready solutions.",
-                    color: "text-frost"
-                  }
-                ].map((item, i) => (
-                  <div key={i} className="process-step reveal">
-                    <div className={`font-anton text-[40px] tracking-tight mb-6 ${item.color}`}>
-                      {item.step}
-                    </div>
-                    <div className="w-8 h-[1px] bg-frost/20 mb-6" />
-                    <h3 className="font-anton text-[20px] tracking-[0.05em] mb-4 uppercase text-frost">
-                      {item.title}
-                    </h3>
-                    <p className="text-[14px] leading-[1.8] text-frost/50 font-light">
-                      {item.desc}
-                    </p>
+              <div className="animate-marquee flex gap-16 items-center">
+                {[...Array(2)].map((_, listIdx) => (
+                  <div key={listIdx} className="flex gap-16 items-center flex-shrink-0">
+                    {[
+                      { label: "Engineering", icon: Settings },
+                      { label: "3D Printing", icon: Layers },
+                      { label: "Software Tech", icon: Terminal },
+                      { label: "Bio-Composites", icon: Leaf },
+                      { label: "Rapid Prototyping", icon: Zap },
+                      { label: "Reverse Eng.", icon: Search },
+                      { label: "Mechanical CAD", icon: Compass },
+                      { label: "Eco Materials", icon: Recycle }
+                    ].map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-4 group cursor-pointer">
+                        <div className="text-coral transition-transform duration-300 group-hover:scale-110">
+                          <item.icon size={28} className="stroke-[1.25]" />
+                        </div>
+                        <span className="text-[12px] font-mono tracking-widest uppercase text-frost whitespace-nowrap font-roboto">
+                          {item.label}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 ))}
               </div>
             </div>
-          </section>
-          {/* PRODUCTS & 3D PROTOTYPE */}
-          <section id="products" className="bg-carbon py-24 md:py-32 px-6 md:px-12 border-t border-frost/5 relative z-10">
-            <div className="max-w-7xl mx-auto">
-              <div className="products-header reveal mb-20">
-                <div className="section-label mb-6 flex items-center gap-4">
-                  <p className="text-[12px] tracking-[0.25em] uppercase text-mauve font-semibold">What we do</p>
+
+            {/* Main padded contents container restricted to desktop max-width */}
+            <div className="max-w-7xl mx-auto py-24 md:py-32 px-6 md:px-12">
+              
+              {/* Section title */}
+              <div className="grid-header opacity-0 mb-16">
+                <div className="section-label mb-5 flex items-center gap-4">
+                  <p className="text-[12px] tracking-[0.25em] uppercase text-mauve font-semibold font-roboto">Capabilities Showcase</p>
                 </div>
-                <h2 className="font-anton text-[50px] md:text-[6vw] lg:text-[80px] tracking-[0.02em] leading-[1.1] uppercase">
-                  Products &<br /><span className="text-coral">Services</span>
+                <h2 className="font-anton text-[45px] md:text-[5vw] lg:text-[72px] tracking-[0.02em] leading-[1.1] uppercase text-frost">
+                  INVENT. BUILD. <span className="text-coral">SUSTAIN.</span>
                 </h2>
               </div>
-              
-              <ServicesGrid />
 
-              {/* 3D Prototype Sub-section */}
-              <div id="prototype" className="mt-32 pt-24 border-t border-frost/5 grid lg:grid-cols-2 gap-16 items-center relative overflow-hidden">
-                <div className="prototype-left reveal">
-                  <div className="section-label mb-6 flex items-center gap-4">
-                    <p className="text-[12px] tracking-[0.25em] uppercase text-mauve font-semibold">Interactive</p>
-                  </div>
-                  <h2 className="font-anton text-[40px] md:text-[5vw] lg:text-[60px] tracking-[0.02em] leading-[1.1] uppercase text-frost mb-8">
-                    3D <span className="text-coral">Model</span>
-                  </h2>
-                  <p className="text-[16px] md:text-[18px] leading-[1.8] text-frost/60 mb-10 font-light max-w-lg">
-                    Send us your car parts design and we&apos;ll get it done. Interact with the prototype model to explore the precision and complexity of our mechanical fabrication capabilities.
-                  </p>
-                  <a 
-                    href="https://wa.me/601160915670?text=I%20would%20like%20to%20send%20a%20car%20part%20design%20for%20a%20quotation."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-coral text-white px-9 py-4 text-[13px] tracking-[0.2em] uppercase inline-flex items-center gap-3 transition-all hover:bg-white hover:text-coral font-bold shadow-[0_10px_30px_rgba(252,103,63,0.2)] hover:shadow-none hover:-translate-y-1"
-                  >
-                    Inquire Us
-                  </a>
-                </div>
-                <div className="prototype-right reveal h-[400px] md:h-[500px] relative">
-                  <CarPartModel />
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* PANGKAS */}
-          <section id="pangkas" className="relative z-10 w-full bg-carbon">
-            
-            {/* 3D Scrollytelling Sequence */}
-            <PangkasScrolly />
-
-            {/* Normal Info Cards (revealed on scroll) */}
-            <div className="relative max-w-7xl mx-auto px-6 md:px-12 py-24 md:py-32 border-t border-frost/5">
-              {/* Material Specs & End Product Showcase Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24 max-w-6xl mx-auto items-stretch">
-                {/* Column 1: Material Specs (Characteristics with icons) */}
-                <div className="pangkas-machine-card reveal p-8 bg-frost/3 border border-frost/10 rounded-xl backdrop-blur-sm relative overflow-hidden flex flex-col justify-between">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-lime/5 rounded-full filter blur-[50px] pointer-events-none" />
-                  <div>
-                    <div className="text-[11px] font-mono tracking-widest text-lime mb-4 uppercase font-bold">Material specs</div>
-                    <h3 className="font-anton text-[26px] md:text-[32px] tracking-[0.05em] text-frost mb-6 uppercase">Characteristics</h3>
-                    <div className="space-y-5">
-                      {[
-                        { label: "Heat Insulating", desc: "Reduces thermal transfer effectively", icon: Thermometer },
-                        { label: "Crack Resistant", desc: "High flexural and impact tolerance", icon: ShieldCheck },
-                        { label: "Suited for Wet Conditions", desc: "Zero decay or moisture degradation", icon: Droplets },
-                        { label: "Lightweight & Durable", desc: "Easy to transport, engineered to last", icon: Feather }
-                      ].map((item, idx) => (
-                        <div key={idx} className="flex gap-4 border-b border-frost/5 pb-4 last:border-0">
-                          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-lime/10 border border-lime/20 flex items-center justify-center text-lime mt-1">
-                            <item.icon size={20} />
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-[15px] text-frost font-medium uppercase font-mono mb-0.5">{item.label}</span>
-                            <span className="text-[13px] text-frost/50 font-light leading-relaxed">{item.desc}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Column 2: End Product Image Card */}
-                <div className="pangkas-diagram-card reveal relative group overflow-hidden rounded-xl border border-frost/10 bg-carbon flex flex-col justify-between">
-                  <div className="h-[420px] md:h-full relative overflow-hidden flex-grow min-h-[360px]">
+              {/* Grid Container */}
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-stretch">
+                
+                {/* CARD 1: Main Highlight Card (Left, Large) - Now featuring Pangkas */}
+                <div className="grid-card opacity-0 lg:col-span-2 lg:row-span-2 group relative rounded-2xl overflow-hidden border border-frost/10 bg-frost/2 backdrop-blur-sm flex flex-col justify-between transition-all duration-500 hover:border-lime/50 hover:shadow-[0_20px_50px_rgba(223,241,34,0.12)] min-h-[500px]">
+                  {/* Background Image */}
+                  <div className="absolute inset-0 z-0">
                     <img 
                       src="/product-end.png" 
-                      alt="End Product" 
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                      alt="Pangkas Circular Pavers" 
+                      className="w-full h-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/80 to-carbon/40 transition-opacity duration-500 group-hover:opacity-90" />
                   </div>
-                  <div className="p-6 relative z-10 bg-carbon/90 backdrop-blur-sm border-t border-frost/5">
-                    <h4 className="font-anton text-[22px] text-frost uppercase tracking-wider mb-2">End Product</h4>
-                    <p className="text-[13px] text-frost/50 font-light leading-relaxed">
-                      Durable, crack-resistant modular floor tiles and circular construction pavers upcycled from local post-consumer plastic wastes.
+
+                  {/* Top content */}
+                  <div className="relative z-10 p-8 md:p-10">
+                    <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-lime bg-carbon/80 px-3.5 py-1.5 rounded border border-lime/20">
+                      FEATURED INNOVATION
+                    </span>
+                  </div>
+
+                  {/* Bottom Content */}
+                  <div className="relative z-10 p-8 md:p-10">
+                    <h3 className="font-anton text-[36px] md:text-[46px] tracking-[0.03em] leading-[1.05] uppercase text-frost mb-4">
+                      PANGKAS<br /><span className="text-lime">CIRCULAR PAVERS</span>
+                    </h3>
+                    <p className="text-[14px] md:text-[15px] leading-relaxed text-frost/65 mb-8 max-w-lg font-light font-roboto">
+                      Durable modular floor tiles and circular construction pavers upcycled from local post-consumer plastic wastes. High performance met with ecological responsibility.
                     </p>
+                    <a 
+                      href="/pangkas"
+                      className="inline-flex items-center gap-3 bg-lime text-carbon text-[12px] tracking-[0.2em] uppercase font-bold py-4 px-8 transition-all duration-300 hover:bg-white hover:text-lime group-hover:translate-x-1"
+                    >
+                      Discover Pangkas
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform duration-300 group-hover:translate-x-1"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </a>
                   </div>
                 </div>
+
+                {/* CARD 2: Right Top Left */}
+                <div className="grid-card opacity-0 lg:col-span-1 group relative rounded-2xl overflow-hidden border border-frost/10 bg-carbon flex flex-col justify-end transition-all duration-500 hover:border-lime/50 hover:shadow-[0_20px_50px_rgba(223,241,34,0.08)] min-h-[250px]">
+                  <div className="absolute inset-0 z-0">
+                    <img 
+                      src="/scanning.png" 
+                      alt="Reverse Engineering" 
+                      className="w-full h-full object-cover transition-transform duration-[800ms] ease-out group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/85 to-carbon/40 transition-opacity duration-500 group-hover:opacity-90" />
+                  </div>
+                  <div className="relative z-10 p-6">
+                    <h4 className="font-anton text-[20px] md:text-[22px] tracking-[0.03em] uppercase text-frost mb-2">
+                      REVERSE ENGINEERING
+                    </h4>
+                    <p className="text-[13px] text-frost/65 leading-relaxed mb-5 font-light font-roboto">
+                      Precision digitization of obsolete or custom mechanical components.
+                    </p>
+                    <a href="/services" className="text-[11px] font-mono tracking-widest text-lime uppercase font-bold hover:text-frost transition-colors flex items-center gap-2">
+                      Learn More →
+                    </a>
+                  </div>
+                </div>
+
+                {/* CARD 3: Right Top Right - Now featuring Engineering & Manufacturing */}
+                <div className="grid-card opacity-0 lg:col-span-1 group relative rounded-2xl overflow-hidden border border-frost/10 bg-carbon flex flex-col justify-end transition-all duration-500 hover:border-lime/50 hover:shadow-[0_20px_50px_rgba(223,241,34,0.08)] min-h-[250px]">
+                  <div className="absolute inset-0 z-0">
+                    <img 
+                      src="/about-image.jpg" 
+                      alt="Engineering & Manufacturing" 
+                      className="w-full h-full object-cover transition-transform duration-[800ms] ease-out group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/85 to-carbon/40 transition-opacity duration-500 group-hover:opacity-90" />
+                  </div>
+                  <div className="relative z-10 p-6">
+                    <h4 className="font-anton text-[20px] md:text-[22px] tracking-[0.03em] uppercase text-frost mb-2">
+                      ENGINEERING & MFG
+                    </h4>
+                    <p className="text-[13px] text-frost/65 leading-relaxed mb-5 font-light font-roboto">
+                      High-performance industrial solutions, simulation, and rapid composite fabrication.
+                    </p>
+                    <a href="/about" className="text-[11px] font-mono tracking-widest text-lime uppercase font-bold hover:text-frost transition-colors flex items-center gap-2">
+                      Learn More →
+                    </a>
+                  </div>
+                </div>
+
+                {/* CARD 4: Right Bottom Left */}
+                <div className="grid-card opacity-0 lg:col-span-1 group relative rounded-2xl overflow-hidden border border-frost/10 bg-carbon flex flex-col justify-end transition-all duration-500 hover:border-lime/50 hover:shadow-[0_20px_50px_rgba(223,241,34,0.08)] min-h-[250px]">
+                  <div className="absolute inset-0 z-0">
+                    <img 
+                      src="/3dprint.jpg" 
+                      alt="3D Printing Services" 
+                      className="w-full h-full object-cover transition-transform duration-[800ms] ease-out group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/85 to-carbon/40 transition-opacity duration-500 group-hover:opacity-90" />
+                  </div>
+                  <div className="relative z-10 p-6">
+                    <h4 className="font-anton text-[20px] md:text-[22px] tracking-[0.03em] uppercase text-frost mb-2">
+                      3D PRINTING & PROTOTYPING
+                    </h4>
+                    <p className="text-[13px] text-frost/65 leading-relaxed mb-5 font-light font-roboto">
+                      Rapid additive fabrication using engineering polymers and composites.
+                    </p>
+                    <a href="/services" className="text-[11px] font-mono tracking-widest text-lime uppercase font-bold hover:text-frost transition-colors flex items-center gap-2">
+                      View Services →
+                    </a>
+                  </div>
+                </div>
+
+                {/* CARD 5: Right Bottom Right */}
+                <div className="grid-card opacity-0 lg:col-span-1 group relative rounded-2xl overflow-hidden border border-frost/10 bg-carbon flex flex-col justify-end transition-all duration-500 hover:border-lime/50 hover:shadow-[0_20px_50px_rgba(223,241,34,0.08)] min-h-[250px]">
+                  <div className="absolute inset-0 z-0">
+                    <img 
+                      src="/bumper.png" 
+                      alt="Automotive Components" 
+                      className="w-full h-full object-cover transition-transform duration-[800ms] ease-out group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/85 to-carbon/40 transition-opacity duration-500 group-hover:opacity-90" />
+                  </div>
+                  <div className="relative z-10 p-6">
+                    <h4 className="font-anton text-[20px] md:text-[22px] tracking-[0.03em] uppercase text-frost mb-2">
+                      AUTOMOTIVE FABRICATION
+                    </h4>
+                    <p className="text-[13px] text-frost/65 leading-relaxed mb-5 font-light font-roboto">
+                      Custom structural composites and components for extreme utility.
+                    </p>
+                    <a href="/services" className="text-[11px] font-mono tracking-widest text-lime uppercase font-bold hover:text-frost transition-colors flex items-center gap-2">
+                      View Services →
+                    </a>
+                  </div>
+                </div>
+
               </div>
+
             </div>
           </section>
 
@@ -804,7 +644,7 @@ export default function Home() {
 
                     <button type="submit" disabled={sending} className="form-submit bg-carbon text-frost px-10 py-4 text-[13px] tracking-[0.2em] uppercase transition-all hover:bg-coral hover:translate-y-[-2px] self-start inline-flex items-center gap-3 font-bold mt-4">
                       {sending ? "Sending..." : "Send Message"}
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </button>
                   </form>
                 </div>

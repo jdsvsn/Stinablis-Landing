@@ -1,14 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Home, Info, Box, Mail, Menu, X, Recycle } from "lucide-react";
+import { Home, Info, Box, Mail, Menu, X, Recycle, Layers } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname, useRouter } from "next/navigation";
 
 const navLinks = [
   { label: "Home", href: "#hero", icon: Home },
   { label: "About", href: "#about", icon: Info },
-  { label: "Process", href: "#process", icon: Box },
-  { label: "Products", href: "#products", icon: Box },
+  { label: "Services", href: "#products", icon: Box },
+  { label: "3D Model", href: "#3d-model", icon: Layers },
   { label: "Pangkas", href: "#pangkas", icon: Recycle },
   { label: "Contact", href: "#contact", icon: Mail },
 ];
@@ -17,6 +18,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isLightBg, setIsLightBg] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -33,25 +36,27 @@ export default function Navbar() {
     const onScroll = () => {
       setScrolled(window.scrollY > 60);
 
-      const aboutEl = document.getElementById("about");
-      const contactEl = document.getElementById("contact");
-      const navbarHeight = 80;
-
       let overLight = false;
-      [aboutEl, contactEl].forEach((el) => {
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= navbarHeight && rect.bottom >= 0) {
-            overLight = true;
+      if (pathname === "/") {
+        const aboutEl = document.getElementById("about");
+        const contactEl = document.getElementById("contact");
+        const navbarHeight = 80;
+
+        [aboutEl, contactEl].forEach((el) => {
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top <= navbarHeight && rect.bottom >= 0) {
+              overLight = true;
+            }
           }
-        }
-      });
+        });
+      }
       setIsLightBg(overLight);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll(); // Run initially
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [pathname]);
 
   const scrollTo = (href: string) => {
     const id = href.replace("#", "");
@@ -63,6 +68,49 @@ export default function Navbar() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleNavClick = (href: string) => {
+    if (href === "#products") {
+      if (pathname === "/services") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        router.push("/services");
+      }
+    } else if (href === "#3d-model") {
+      if (pathname === "/3d-model") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        router.push("/3d-model");
+      }
+    } else if (href === "#pangkas") {
+      if (pathname === "/pangkas") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        router.push("/pangkas");
+      }
+    } else if (href === "#about") {
+      if (pathname === "/about") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        router.push("/about");
+      }
+    } else {
+      if (pathname === "/") {
+        scrollTo(href);
+      } else {
+        sessionStorage.setItem("scrollToSection", href);
+        router.push("/");
+      }
+    }
+  };
+
+  const handleLogoClick = () => {
+    if (pathname === "/") {
+      scrollToTop();
+    } else {
+      router.push("/");
+    }
   };
 
   const navClasses = scrolled
@@ -79,7 +127,7 @@ export default function Navbar() {
         {/* Logo */}
         <div className="flex items-center">
           <button
-            onClick={scrollToTop}
+            onClick={handleLogoClick}
             className="group flex items-center"
             aria-label="Go to home"
           >
@@ -100,7 +148,7 @@ export default function Navbar() {
           {navLinks.map((link) => (
             <li key={link.label}>
               <button
-                onClick={() => scrollTo(link.href)}
+                onClick={() => handleNavClick(link.href)}
                 className={`flex items-center gap-2 font-roboto text-[13px] tracking-[0.12em] uppercase opacity-60 hover:opacity-100 transition-all duration-200 ${
                   isLightBg ? "text-carbon" : "text-frost"
                 }`}
@@ -115,7 +163,7 @@ export default function Navbar() {
         {/* CTA and Burger */}
         <div className="flex items-center gap-3">
           <button
-            onClick={() => scrollTo("#contact")}
+            onClick={() => handleNavClick("#contact")}
             className={`hidden sm:block font-roboto text-[12px] tracking-[0.12em] uppercase px-6 py-2.5 border transition-all duration-200 rounded-full ${
               isLightBg 
                 ? "text-carbon border-carbon/20 hover:border-coral hover:bg-coral/10" 
@@ -176,7 +224,7 @@ export default function Navbar() {
                 >
                   <button
                     onClick={() => {
-                      scrollTo(link.href);
+                      handleNavClick(link.href);
                       setIsMenuOpen(false);
                     }}
                     className="flex items-center gap-4 font-anton text-[24px] md:text-[32px] tracking-[0.05em] uppercase text-frost hover:text-coral transition-colors text-left"
@@ -199,7 +247,7 @@ export default function Navbar() {
               </div>
               <button
                 onClick={() => {
-                  scrollTo("#contact");
+                  handleNavClick("#contact");
                   setIsMenuOpen(false);
                 }}
                 className="bg-coral text-white font-roboto text-[12px] tracking-[0.15em] uppercase px-8 py-3.5 border border-coral hover:bg-transparent transition-all font-bold"
